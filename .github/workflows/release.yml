@@ -1,1 +1,44 @@
- 
+name: Build App
+
+on: push: branches: [ main ] workflow_dispatch: # Permite ejecutarlo manualmente desde GitHub
+
+jobs: build-windows: runs-on: windows-latest steps: - name: Checkout del código uses: actions/checkout@v4
+
+  - name: Instalar Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+
+  - name: Instalar dependencias
+    run: npm install
+
+  - name: Compilar para Windows
+    run: npm run dist:win
+
+  - name: Subir instalador Windows
+    uses: actions/upload-artifact@v4
+    with:
+      name: windows-installer
+      path: release/*.exe
+
+build-linux: runs-on: ubuntu-latest steps: - name: Checkout del código uses: actions/checkout@v4
+
+  - name: Instalar dependencias del sistema para Linux
+    run: sudo apt-get update && sudo apt-get install -y libarchive-tools fuse libnss3 libnspr4 libgbm-dev libasound2
+
+  - name: Instalar Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+
+  - name: Instalar dependencias
+    run: npm install
+
+  - name: Compilar para Linux
+    run: npm run dist:linux
+
+  - name: Subir AppImage
+    uses: actions/upload-artifact@v4
+    with:
+      name: linux-appimage
+      path: release/*.AppImage
