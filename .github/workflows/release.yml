@@ -10,13 +10,22 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
-      - run: npm run dist:win
-      - uses: actions/upload-artifact@v4
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Compilar para Windows
+        run: npm run dist:win
+
+      - name: Subir instalador Windows
+        uses: actions/upload-artifact@v4
         with:
           name: windows-installer
           path: release/*.exe
@@ -24,15 +33,26 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y libarchive-tools fuse libnss3 libnspr4 libgbm-dev libasound2
-      - uses: actions/setup-node@v4
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Instalar dependencias del sistema para Linux
+        # Cambiamos libasound2 por libasound2t64
+        run: sudo apt-get update && sudo apt-get install -y libarchive-tools fuse libnss3 libnspr4 libgbm-dev libasound2t64 libasound2-dev
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
-      - run: npm run dist:linux
-      - uses: actions/upload-artifact@v4
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Compilar para Linux
+        run: npm run dist:linux
+
+      - name: Subir AppImage
+        uses: actions/upload-artifact@v4
         with:
           name: linux-appimage
           path: release/*.AppImage
-          
