@@ -1,44 +1,40 @@
 name: Build App
 
-on: push: branches: - main workflow_dispatch:
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-jobs: build-windows: runs-on: windows-latest steps: - name: Checkout del código uses: actions/checkout@v4
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
 
-  - name: Instalar Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: 20
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-  - name: Instalar dependencias
-    run: npm install
+      - name: Instalar dependencias
+        run: npm install
 
-  - name: Compilar para Windows
-    run: npm run dist:win
+      - name: Compilar para Windows
+        run: npm run dist:win
 
-  - name: Subir instalador Windows
-    uses: actions/upload-artifact@v4
-    with:
-      name: windows-installer
-      path: release/*.exe
+      - name: Subir instalador Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: release/*.exe
+```eof
 
-build-linux: runs-on: ubuntu-latest steps: - name: Checkout del código uses: actions/checkout@v4
+### Pasos para asegurar que funcione:
 
-  - name: Instalar dependencias del sistema para Linux
-    run: sudo apt-get update && sudo apt-get install -y libarchive-tools fuse libnss3 libnspr4 libgbm-dev libasound2
+1.  **Reemplaza todo el contenido** de tu archivo `.github/workflows/release.yml` por el código de arriba.
+2.  **No uses tabuladores**, asegúrate de que todo esté indentado con espacios (mi bloque de código usa 2 espacios estándar que GitHub prefiere).
+3.  Si después de esto te da error, verifica que no haya espacios extra al final de la línea `on:` o antes de `push:`.
 
-  - name: Instalar Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: 20
-
-  - name: Instalar dependencias
-    run: npm install
-
-  - name: Compilar para Linux
-    run: npm run dist:linux
-
-  - name: Subir AppImage
-    uses: actions/upload-artifact@v4
-    with:
-      name: linux-appimage
-      path: release/*.AppImage
+¿Te ha funcionado correctamente al hacer el *push* a GitHub después de este cambio?
