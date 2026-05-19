@@ -1,46 +1,58 @@
-{
-  "name": "sociografo-web-pro",
-  "version": "1.0.0",
-  "private": true,
-  "main": "main.js",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "dist:linux": "npm run build && electron-builder --linux AppImage --publish never",
-    "dist:win": "npm run build && electron-builder --win --x64 --publish never"
-  },
-  "dependencies": {
-    "lucide-react": "^1.16.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwindcss": "^4.0.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "^4.3.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "electron": "^28.0.0",
-    "electron-builder": "^24.9.0",
-    "vite": "^6.0.0"
-  },
-  "build": {
-    "appId": "com.sociografo.app",
-    "productName": "SocioGrafoWebPro",
-    "files": [
-      "dist/**/*",
-      "main.js",
-      "package.json"
-    ],
-    "asar": true,
-    "directories": {
-      "output": "release"
-    },
-    "linux": {
-      "target": ["AppImage"],
-      "category": "Education"
-    },
-    "win": {
-      "target": ["nsis"],
-      "icon": "build/icon.ico"
-    }
-  }
-}
+name: Build App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Compilar para Windows
+        run: npm run dist:win
+
+      - name: Subir instalador Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: release/*.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Instalar dependencias del sistema para Linux
+        # Cambiado libasound2 por libasound2t64
+        run: sudo apt-get update && sudo apt-get install -y libarchive-tools fuse libnss3 libnspr4 libgbm-dev libasound2t64
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Compilar para Linux
+        run: npm run dist:linux
+
+      - name: Subir AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-appimage
+          path: release/*.AppImage
