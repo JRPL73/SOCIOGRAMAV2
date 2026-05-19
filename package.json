@@ -46,3 +46,11 @@
 }
 ```eof
 
+### Instrucciones para que funcione:
+1. Abre tu archivo `package.json` en tu editor.
+2. Selecciona y borra **todo** el texto que haya dentro (no dejes ni una línea).
+3. Pega **únicamente** el bloque de texto de arriba (desde el `{` inicial hasta el `}` final).
+4. Guarda el archivo.
+5. Sube los cambios a GitHub (`git add`, `git commit`, `git push`).
+
+Al hacer esto, el error de sintaxis desaparecerá y GitHub Actions debería por fin completar el proceso correctamente. ¡Avísame cuando termine!
