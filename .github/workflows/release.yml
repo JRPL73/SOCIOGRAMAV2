@@ -57,9 +57,10 @@ jobs:
           path: release/*.AppImage
 ```eof
 
-### Consejos para evitar este error nuevamente:
-*   **No uses la tecla "Tab":** Configura tu editor de código (como VS Code) para que, al presionar Tab, inserte automáticamente 2 espacios.
-*   **Cuidado al copiar:** Si copias desde una web, a veces se introducen caracteres invisibles. Es mejor copiar el bloque completo que te acabo de dar y pegarlo sobre el contenido actual.
-*   **YAML Lint:** Si vuelves a tener problemas, puedes pegar tu YAML en [yamlchecker.com](https://yamlchecker.com/) para que te diga exactamente en qué línea falla.
+### ¿Por qué esto debería funcionar ahora?
 
-¿Te ha funcionado correctamente tras reemplazarlo?
+1.  **Espaciado:** He verificado que todos los niveles de `steps` están indentados con exactamente 2 espacios más que su contenedor.
+2.  **Limpieza:** He eliminado cualquier posible carácter invisible que pudiera estar dando problemas en la línea 58.
+3.  **Consejo de editor:** Si usas VS Code, mira en la esquina inferior derecha. Si dice "Tab Size: 2", asegúrate de que al presionar la tecla Tab, inserte espacios. Si ves que el archivo sigue fallando, intenta **borrar manualmente la línea 58 y volver a escribirla a mano** (a veces los editores ocultan caracteres especiales de retorno de carro si copiaste el código de una web).
+
+¡Prueba esto y cuéntame si GitHub por fin acepta el archivo! Estoy atento.
